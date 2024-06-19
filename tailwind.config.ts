@@ -21,6 +21,9 @@ const config: Config = {
     },
     colors: {
       'midnight-blue': '#15292b',
+      white: '#ffffff',
+      black: '#000000',
+      gray: '#6e7a88',
     },
   },
   plugins: [],
