@@ -23,6 +23,7 @@ export const sendRequest = async (
       params as Record<string, string>,
     ).toString();
     const url = `https://www.alphavantage.co/query?function=${functionName}&${query}`;
+
     const fetchOptions: RequestInit = {
       method,
       headers: {

@@ -3,7 +3,11 @@
 import BaseCard from '@/components/BaseCard';
 import { sendRequest } from '@/core/sendRequest';
 import Quote from '@/types/quote';
-import { Quote as QuoteApi } from '@/types/apis';
+import {
+  Interval,
+  Quote as QuoteApi,
+  TimeSeriesIntraday as TimeSeriesIntradayApi,
+} from '@/types/apis';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import convertQuoteResponse from '@/util/convertQuoteResponse';
@@ -12,16 +16,32 @@ import TrendingDownIcon from '@/icons/TrendingDown';
 import ClockIcon from '@/icons/Clock';
 import DoubleDownIcon from '@/icons/DoubleDownArrow';
 import DoubleUpArrowIcon from '@/icons/DoubleUpArrow';
+import LineChart from '@/components/LineChart';
+import BaseButton from '@/components/ui/BaseButton';
+import { TimeSeriesIntraday } from '@/types/timeSeriesIntraday';
+import convertTimeSeriesIntradayResponse from '@/util/convertTimeSeriesIntradayResponse';
 
 export default function Page() {
   const { symbol } = useParams();
   const apiKey = process.env.NEXT_PUBLIC_STOCK_API_KEY ?? '';
 
   const [quote, setQuote] = useState<Quote | null>(null);
+  const [selectedInterval, setSelectedInterval] = useState<Interval>('5min');
+  const [chartData, setChartData] =
+    useState<Record<string, TimeSeriesIntraday>>();
   const [priceOrPercentColor, setPriceOrPercentColor] = useState(
     'text-gray dark:text-white',
   );
 
+  /**
+   * @function handleIntervalSelection
+   * @description Select the interval to update the chart view.
+   * @param {Interval} interval Selected interval.
+   * @returns {void} Not returning any value.
+   */
+  const handleIntervalSelection = (interval: Interval): void => {
+    setSelectedInterval(interval);
+  };
   useEffect(() => {
     const fetchQuote = async () => {
       if (symbol) {
@@ -49,8 +69,29 @@ export default function Page() {
         }
       }
     };
+
+    const fetchTimeSeriesIntraday = async () => {
+      try {
+        const queryString: TimeSeriesIntradayApi = {
+          function: 'TIME_SERIES_INTRADAY',
+          symbol: symbol.toString(),
+          interval: selectedInterval,
+          datatype: 'json',
+          apikey: apiKey,
+        };
+
+        const response = await sendRequest(queryString);
+        const convertedData = convertTimeSeriesIntradayResponse(response);
+
+        setChartData(convertedData.timeSeries);
+      } catch (error) {
+        console.error('Error fetching intraday data: ', error);
+      }
+    };
+
     fetchQuote();
-  }, [symbol, apiKey]);
+    fetchTimeSeriesIntraday();
+  }, [symbol, apiKey, selectedInterval]);
 
   if (!symbol)
     return (
@@ -62,7 +103,29 @@ export default function Page() {
   return (
     <main>
       <div className="flex flex-col items-center">
-        <div>chart</div>
+        {chartData && <LineChart data={chartData} />}
+        <div className="flex gap-2 mb-3 overflow:x-auto">
+          <BaseButton
+            text="1 min"
+            buttonClick={() => handleIntervalSelection('1min')}
+          />
+          <BaseButton
+            text="5 min"
+            buttonClick={() => handleIntervalSelection('5min')}
+          />
+          <BaseButton
+            text="15 min"
+            buttonClick={() => handleIntervalSelection('15min')}
+          />
+          <BaseButton
+            text="30 min"
+            buttonClick={() => handleIntervalSelection('30min')}
+          />
+          <BaseButton
+            text="60 min"
+            buttonClick={() => handleIntervalSelection('60min')}
+          />
+        </div>
         <h1 className="text-lg bold text-black dark:text-white">
           Details for {symbol}
         </h1>
@@ -83,7 +146,7 @@ export default function Page() {
                 {quote?.price}
               </h2>
               <div className="flex justify-center">
-                {quote.price > 0 ? <TrendingUpIcon /> : <TrendingDownIcon />}
+                {quote.change > 0 ? <TrendingUpIcon /> : <TrendingDownIcon />}
                 <span className={`text-s ml-2 ${priceOrPercentColor}`}>
                   {quote.change} ({quote.changePercent})
                 </span>
