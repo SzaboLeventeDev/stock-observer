@@ -29,7 +29,7 @@ export type Quote = {
  * @description Type of the query string to retrieve daily trading data for the chart.
  */
 export type TimeSeriesIntraday = {
-  function: 'TIME_SERIES_INTRADAY';
+  functionName: 'TIME_SERIES_INTRADAY';
   symbol: string;
   interval: Interval;
   apikey: string;

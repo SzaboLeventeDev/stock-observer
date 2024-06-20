@@ -19,7 +19,8 @@ const isInterval = (value: string): value is Interval => {
  * @function convertTimeSeriesIntradayResponse
  * @description Convert the incoming data.
  * @param {TimeSeriesIntradayResponseDto} dto Incoming data
- * @returns {Record<string, TimeSeriesIntraday>} Returns an object with metadata and keys of strings (actual dates) and the data about the trade in that period.
+ * @returns {Record<string, TimeSeriesIntraday>} Returns an object with metadata and keys of strings (actual dates)
+ * and the data about the trade in that period.
  */
 const convertTimeSeriesIntradayResponse = (
   dto: TimeSeriesIntradayResponseDto,

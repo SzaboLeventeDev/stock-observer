@@ -47,6 +47,7 @@ export const sendRequest = async (
 
     return data;
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error during request:', error);
     throw error;
   }

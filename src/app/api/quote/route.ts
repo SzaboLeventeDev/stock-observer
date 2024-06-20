@@ -1,5 +1,5 @@
 import { sendRequest } from '@/core/sendRequest';
-import { Search } from '@/types/apis';
+import { Quote } from '@/types/apis';
 import isErrorWithMessage from '@/util/errorValidator';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 
     if (
       !searchParamsObj.functionName ||
-      !searchParamsObj.keywords ||
+      !searchParamsObj.symbol ||
       !searchParamsObj.apikey
     ) {
       return NextResponse.json(
@@ -22,9 +22,9 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const queryString: Search = {
-      functionName: 'SYMBOL_SEARCH',
-      keywords: searchParamsObj.keywords,
+    const queryString: Quote = {
+      functionName: 'GLOBAL_QUOTE',
+      symbol: searchParamsObj.symbol,
       datatype: 'json',
       apikey: searchParamsObj.apikey,
     };
