@@ -3,7 +3,7 @@ import { Quote } from '@/types/apis';
 import isErrorWithMessage from '@/util/errorValidator';
 import { NextRequest, NextResponse } from 'next/server';
 
-export default async function GET(request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
 
@@ -37,6 +37,7 @@ export default async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error during request', { error });
     const errorMessage = isErrorWithMessage(error)
       ? error.message

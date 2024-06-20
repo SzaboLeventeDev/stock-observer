@@ -65,6 +65,7 @@ export default function Page() {
             setPriceOrPercentColor('text-gray');
           }
         } catch (error) {
+          // eslint-disable-next-line no-console
           console.error('Error fetching quote:', error);
         }
       }
@@ -73,7 +74,7 @@ export default function Page() {
     const fetchTimeSeriesIntraday = async () => {
       try {
         const queryString: TimeSeriesIntradayApi = {
-          function: 'TIME_SERIES_INTRADAY',
+          functionName: 'TIME_SERIES_INTRADAY',
           symbol: symbol.toString(),
           interval: selectedInterval,
           datatype: 'json',
@@ -85,6 +86,7 @@ export default function Page() {
 
         setChartData(convertedData.timeSeries);
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Error fetching intraday data: ', error);
       }
     };

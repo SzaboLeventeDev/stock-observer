@@ -37,6 +37,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error during request', { error });
     const errorMessage = isErrorWithMessage(error)
       ? error.message
