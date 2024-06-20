@@ -4,6 +4,7 @@ import GlobeIcon from '@/icons/Globe';
 import BankNotesIcon from '@/icons/BankNotes';
 import FireIcon from '@/icons/Fire';
 import TagIcon from '@/icons/Tag';
+import BaseCard from './BaseCard';
 
 type StockSummaryCard = {
   stock: Stock;
@@ -13,9 +14,8 @@ type StockSummaryCard = {
 
 const StockSummaryCard: FC<StockSummaryCard> = ({ stock, index, animate }) => {
   return (
-    <div
-      className={`border border-black dark:border-white backdrop-blur bg-gray/30 dark:bg-white/30 p-4 m-2 rounded-xl shadow-lg 
-    transition-transform duration-500 delay-${index * 300} transform ${animate ? 'translate-y-0' : 'translate-y-20'}`}
+    <BaseCard
+      className={`transition-transform duration-500 delay-${index * 300} transform ${animate ? 'translate-y-0' : 'translate-y-20'}`}
     >
       <section>
         <div>
@@ -51,7 +51,7 @@ const StockSummaryCard: FC<StockSummaryCard> = ({ stock, index, animate }) => {
           {stock.matchScore.toFixed(4)}
         </span>
       </div>
-    </div>
+    </BaseCard>
   );
 };
 
