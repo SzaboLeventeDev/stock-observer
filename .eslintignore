@@ -1,0 +1,20 @@
+# Node modules
+node_modules/
+
+# Next.js build output
+.next/
+
+# Build output
+out/
+dist/
+
+# Ignore ESLint cache
+.eslintcache
+
+# Other files and directories to ignore
+public/
+
+coverage/
+
+# Optional: TypeScript declaration files
+*.d.ts
