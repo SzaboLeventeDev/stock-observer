@@ -3,11 +3,10 @@
 import SearchField from '@/components/SearchField';
 import StockSummaryCard from '@/components/StockSummaryCard';
 import { SearchResponseBestMatchesDto } from '@/types/DTOs/SearchResponseDto';
-import { Search } from '@/types/apis';
 import { Stock } from '@/types/stock';
 import convertStockResponse from '@/util/convertStockResponse';
-import { sendRequest } from '@/core/sendRequest';
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function Home() {
   const [stocks, setStocks] = useState<Stock[]>([]);
@@ -20,17 +19,15 @@ export default function Home() {
    * @returns {Promise<void>} Dose not return any value.
    */
   const handleSearch = async (keywords: string): Promise<void> => {
-    const queryString: Search = {
-      functionName: 'SYMBOL_SEARCH',
-      keywords,
-      datatype: 'json',
-      apikey: process.env.NEXT_PUBLIC_STOCK_API_KEY ?? '',
-    };
+    const apikey = process.env.NEXT_PUBLIC_STOCK_API_KEY ?? '';
 
-    const response: SearchResponseBestMatchesDto =
-      await sendRequest(queryString);
-    if (response.bestMatches) {
-      const convertedStocks = response.bestMatches.map((dto) =>
+    const response = await fetch(
+      `/api/search?functionName=SYMBOL_SEARCH&keywords=${keywords}&apikey=${apikey}`,
+    );
+
+    const data: SearchResponseBestMatchesDto = await response.json();
+    if (data.bestMatches) {
+      const convertedStocks = data.bestMatches.map((dto) =>
         convertStockResponse(dto),
       );
       setStocks(convertedStocks);
@@ -46,12 +43,13 @@ export default function Home() {
         <div className="w-full flex-1 overflow-y-auto mt-4 px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
             {stocks.map((stock, index) => (
-              <StockSummaryCard
-                key={stock.symbol}
-                stock={stock}
-                index={index}
-                animate={animateSearchField}
-              />
+              <Link key={stock.symbol} href={`/${stock.symbol}`}>
+                <StockSummaryCard
+                  stock={stock}
+                  index={index}
+                  animate={animateSearchField}
+                />
+              </Link>
             ))}
           </div>
         </div>
