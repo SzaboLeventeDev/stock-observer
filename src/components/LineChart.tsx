@@ -34,16 +34,19 @@ const LineChart: FC<LineChartProps> = ({ data }) => {
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip />
+          <XAxis dataKey="date" allowDataOverflow name="Time" />
+          <YAxis type="number" name="Price" domain={['auto', 'auto']} />
+          <Tooltip filterNull={true} />
           <Legend />
           <Line
             type="monotone"
             dataKey="close"
             stroke="#8884d8"
             activeDot={{ r: 8 }}
+            dot={false}
+            name="Closing prices / stock"
           />
+          {/** entry level */}
         </LChart>
       </ResponsiveContainer>
     </div>
