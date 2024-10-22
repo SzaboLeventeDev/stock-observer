@@ -17,9 +17,9 @@ import ClockIcon from '@/icons/Clock';
 import DoubleDownIcon from '@/icons/DoubleDownArrow';
 import DoubleUpArrowIcon from '@/icons/DoubleUpArrow';
 import LineChart from '@/components/LineChart';
-import BaseButton from '@/components/ui/BaseButton';
 import { TimeSeriesIntraday } from '@/types/timeSeriesIntraday';
 import convertTimeSeriesIntradayResponse from '@/util/convertTimeSeriesIntradayResponse';
+import IntervalSelector from '@/components/symbol/IntervalSelector';
 
 export default function Page() {
   const { symbol } = useParams();
@@ -106,28 +106,7 @@ export default function Page() {
     <main>
       <div className="flex flex-col items-center">
         {chartData && <LineChart data={chartData} />}
-        <div className="flex gap-2 mb-3 overflow:x-auto">
-          <BaseButton
-            text="1 min"
-            buttonClick={() => handleIntervalSelection('1min')}
-          />
-          <BaseButton
-            text="5 min"
-            buttonClick={() => handleIntervalSelection('5min')}
-          />
-          <BaseButton
-            text="15 min"
-            buttonClick={() => handleIntervalSelection('15min')}
-          />
-          <BaseButton
-            text="30 min"
-            buttonClick={() => handleIntervalSelection('30min')}
-          />
-          <BaseButton
-            text="60 min"
-            buttonClick={() => handleIntervalSelection('60min')}
-          />
-        </div>
+        <IntervalSelector onIntervalSelect={handleIntervalSelection} />
         <h1 className="text-lg bold text-black dark:text-white">
           Details for {symbol}
         </h1>
